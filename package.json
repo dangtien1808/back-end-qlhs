@@ -1,21 +1,13 @@
 {
-  "name": "qlhs",
+  "name": "d10-20181219t165104z-001",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dangtien1808/back-end-qlhs.git"
-  },
-  "author": "Tien",
+  "author": "tien",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dangtien1808/back-end-qlhs/issues"
-  },
-  "homepage": "https://github.com/dangtien1808/back-end-qlhs#readme",
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
