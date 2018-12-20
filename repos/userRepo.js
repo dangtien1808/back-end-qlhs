@@ -1,32 +1,34 @@
-var md5 = require('crypto-js/md5');
+// var md5 = require('crypto-js/md5');
+const db = require('../fn/mysql-db');
 
-var db = require('../fn/mysql-db');
+exports.login = function(taikhoan, matkhau) {
+  return new Promise((resolve, reject) => {
+    // let md5_password = md5(password);
+    let sql = `select * from giaovien where taikhoan = '${taikhoan}' and matkhau = '${matkhau}'`;
+    db.load(sql)
+      .then(rows => {
+        if (rows.length === 0) {
+          resolve(null);
+        } else {
+          let user = rows[0];
+          resolve(user);
+        }
+      })
+      .catch(err => reject(err));
+  });
+};
 
-exports.add = function(poco) {
-   
-    var md5_password = md5(poco.Password);
-    var sql = `insert into users(f_Username, f_Password, f_Name, f_Email, f_DOB, f_Permission) values('${poco.Username}', '${md5_password}', '${poco.Name}', '${poco.Email}', '${poco.DOB}', ${poco.Permission})`;
-    return db.insert(sql);
-}
+exports.changePassword = function(taikhoan, matkhau) {
+  // let md5_password = md5(password);
+  let sql = `update giaovien set matkhau = '${matkhau}' where taikhoan = '${taikhoan}'`;
+  db.update(sql);
+};
 
-exports.login = function(userName, password) {
-    return new Promise((resolve, reject) => {
-        var md5_password = md5(password);
-        var sql = `select * from users where f_Username = '${userName}' and f_Password = '${md5_password}'`;
-        db.load(sql)
-            .then(rows => {
-                if (rows.length === 0) {
-                    resolve(null);
-                } else {
-                    var user = rows[0];
-                    resolve(user);
-                }
-            })
-            .catch(err => reject(err));
-    });
-}
-
-exports.load = function(id) {
-    var sql = `select * from users where f_ID = ${id}`;
-    return db.load(sql);
-}
+exports.changeDetail = function(user) {
+  let sql = `update giaovien set hoten = N'${user.hoten}', email = '${
+    user.email
+  }', gioitinh = '${user.gioitinh}', sdt = '${user.sdt}', diachi = N'${
+    user.diachi
+  }', ngaysinh = '${user.ngaysinh}' where taikhoan = '${user.taikhoan}'`;
+  db.update(sql);
+};

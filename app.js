@@ -5,6 +5,7 @@ const express = require('express'),
   path = require('path');
 
 const userCtrl = require('./apiControllers/userController');
+const giaovienCtrl = require('./apiControllers/giaovienController');
 
 var app = express();
 
@@ -16,6 +17,7 @@ var staticDir = express.static(path.resolve(__dirname, 'public'));
 app.use(staticDir);
 
 app.use('/users', userCtrl);
+app.use('/teachers', giaovienCtrl);
 // app.use('/orders', verifyAccessToken, orderCtrl);
 
 const port = process.env.PORT || 3000;
