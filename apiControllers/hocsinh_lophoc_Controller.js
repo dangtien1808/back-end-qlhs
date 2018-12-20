@@ -2,7 +2,7 @@ const express = require('express'),
   axios = require('axios');
 
 const hocsinh_lophoc_Repo = require('../repos/hocsinh_lophoc_Repo');
-
+const chitietbangdiem_Repo = require('../repos/chitietbangdiem_Repo');
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -19,20 +19,43 @@ router.get('/', (req, res) => {
 });
 
 router.post('/add', (req, res) => {
-  hocsinhRepo
-    .add(req.body)
-    .then(insertId => {
-      res.statusCode = 201;
-      res.json({
-        insertId: insertId,
-        hoten: req.body.hoten
+  for (let i = 1; i <= 10; i++) {
+    chitietbangdiem_Repo
+      .add()
+      .then(machitiet1 => {
+        chitietbangdiem_Repo
+          .add()
+          .then(machitiet2 => {
+            hocsinh_lophoc_Repo
+              .add(
+                req.body.mahocsinh,
+                req.body.malop,
+                i,
+                req.body.gvphutrach,
+                machitiet1,
+                machitiet2
+              )
+              .then(insertId => {
+                console.log(insertId);
+              })
+              .catch(err3 => {
+                console.log(err3);
+                res.statusCode = 500;
+                res.end('add giaovien Fail!.');
+              });
+          })
+          .catch(err2 => {
+            console.log(err2);
+            res.statusCode = 500;
+            res.end('add giaovien Fail!.');
+          });
+      })
+      .catch(err => {
+        console.log(err);
+        res.statusCode = 500;
+        res.end('add giaovien Fail!.');
       });
-    })
-    .catch(err => {
-      console.log(err);
-      res.statusCode = 500;
-      res.end('add giaovien Fail!.');
-    });
+  }
 });
 
 router.post('/changedetail', (req, res) => {
