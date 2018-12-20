@@ -20,6 +20,7 @@ exports.login = function(taikhoan, matkhau) {
 
 exports.changePassword = function(taikhoan, matkhau) {
   // let md5_password = md5(password);
+
   let sql = `update giaovien set matkhau = '${matkhau}' where taikhoan = '${taikhoan}'`;
   return db.update(sql);
 };

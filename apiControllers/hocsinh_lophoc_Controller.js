@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   hocsinh_lophoc_Repo
-    .loadAll(req.body.mahocsinh, req.body.malop)
+    .loadPointTable(req.query.mahocsinh, req.query.malop)
     .then(rows => {
       res.json(rows);
     })
@@ -23,9 +23,12 @@ router.post('/add', (req, res) => {
     chitietbangdiem_Repo
       .add()
       .then(machitiet1 => {
+        console.log(machitiet1);
         chitietbangdiem_Repo
           .add()
           .then(machitiet2 => {
+            console.log(machitiet2);
+
             hocsinh_lophoc_Repo
               .add(
                 req.body.mahocsinh,
@@ -35,25 +38,25 @@ router.post('/add', (req, res) => {
                 machitiet1,
                 machitiet2
               )
-              .then(insertId => {
-                console.log(insertId);
+              .then(insertID => {
+                console.log(insertID);
+
+                res.end('add 3 success!.');
               })
               .catch(err3 => {
-                console.log(err3);
                 res.statusCode = 500;
-                res.end('add giaovien Fail!.');
+                res.end('add 3 Fail!.');
               });
           })
           .catch(err2 => {
-            console.log(err2);
             res.statusCode = 500;
-            res.end('add giaovien Fail!.');
+            res.end('add 2 fail');
           });
       })
       .catch(err => {
         console.log(err);
         res.statusCode = 500;
-        res.end('add giaovien Fail!.');
+        res.end('add 1 Fail!.');
       });
   }
 });

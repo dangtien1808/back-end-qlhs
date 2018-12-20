@@ -6,7 +6,7 @@ exports.load = function(machitiet) {
 };
 
 exports.add = function() {
-  var sql = `insert into chitietbangdiem(diemmieng, diem15phut, diem1tiet, diemgk, diemck, xoa) values( '','','',null,null,0)`;
+  var sql = `insert into chitietbangdiem(diemmieng, diem15phut, diem1tiet, diemgk, diemck, xoa) values( '','','','','',0)`;
   return db.insert(sql);
 };
 

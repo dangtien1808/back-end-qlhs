@@ -49,6 +49,7 @@ exports.update = function(sql) {
       if (error) {
         reject(error);
       } else {
+        console.log(value);
         resolve(value.affectedRows);
       }
       cn.end();
