@@ -1,7 +1,7 @@
 const express = require('express'),
   axios = require('axios');
 
-const giaovienRepo = require('../repos/giaovienRepo');
+const giaovienRepo = require('../repos/giaovien_Repo');
 
 const router = express.Router();
 
@@ -38,9 +38,9 @@ router.post('/add', (req, res) => {
 router.post('/delete', (req, res) => {
   giaovienRepo
     .delete(req.body.taikhoan)
-    .then(insertId => {
+    .then(affectedRows => {
       res.json({
-        insertId: insertId,
+        affectedRows: affectedRows,
         taikhoan: req.body.taikhoan
       });
     })

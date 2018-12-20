@@ -1,7 +1,7 @@
 const express = require('express'),
   axios = require('axios');
 
-const userRepo = require('../repos/userRepo');
+const userRepo = require('../repos/user_Repo');
 
 const router = express.Router();
 

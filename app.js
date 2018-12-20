@@ -4,21 +4,28 @@ const express = require('express'),
   cors = require('cors'),
   path = require('path');
 
-const userCtrl = require('./apiControllers/userController');
-const giaovienCtrl = require('./apiControllers/giaovienController');
+const userCtrl = require('./apiControllers/user_Controller');
+const giaovienCtrl = require('./apiControllers/giaovien_Controller');
+const khoiCtrl = require('./apiControllers/khoi_Controller');
+const lophocCtrl = require('./apiControllers/lophoc_Controller');
+const monhocCtrl = require('./apiControllers/monhoc_Controller');
+const hocsinhCtrl = require('./apiControllers/hocsinh_Controller');
 
-var app = express();
+const app = express();
 
 app.use(morgan('dev'));
 app.use(cors());
 app.use(bodyParser.json());
 
-var staticDir = express.static(path.resolve(__dirname, 'public'));
+const staticDir = express.static(path.resolve(__dirname, 'public'));
 app.use(staticDir);
 
 app.use('/users', userCtrl);
 app.use('/teachers', giaovienCtrl);
-// app.use('/orders', verifyAccessToken, orderCtrl);
+app.use('/levelclass', khoiCtrl);
+app.use('/subjects', monhocCtrl);
+app.use('/class', lophocCtrl);
+app.use('/students', hocsinhCtrl);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
