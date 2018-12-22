@@ -22,6 +22,6 @@ exports.add = function(giaovien) {
 };
 
 exports.delete = function(taikhoan) {
-  var sql = `update giaovien set xoa = 1 where taikhoan = ${taikhoan}`;
+  var sql = `update giaovien set xoa = 1 where taikhoan = '${taikhoan}'`;
   return db.update(sql);
 };

@@ -1,7 +1,8 @@
 const db = require('../fn/mysql-db');
 
 exports.loadAll = function() {
-  let sql = 'select * from lophoc where xoa = 0';
+  let sql =
+    'select lh.*, kh.tenkhoi, gv.hoten from lophoc lh, khoi kh, giaovien gv where lh.makhoi = kh.makhoi and lh.giaovienchunhiem = gv.taikhoan and lh.xoa = 0';
   return db.load(sql);
 };
 
