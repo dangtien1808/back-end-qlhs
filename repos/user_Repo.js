@@ -2,6 +2,7 @@
 const db = require('../fn/mysql-db');
 
 exports.login = function(taikhoan, matkhau) {
+  console.log(matkhau);
   return new Promise((resolve, reject) => {
     // let md5_password = md5(password);
     let sql = `select * from giaovien where taikhoan = '${taikhoan}' and matkhau = '${matkhau}'`;

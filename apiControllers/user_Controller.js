@@ -12,7 +12,7 @@ router.post('/login', (req, res) => {
       if (userObj) {
         res.json({
           is_login: true,
-          user: userObj
+          users: userObj
         });
       } else {
         res.json({
