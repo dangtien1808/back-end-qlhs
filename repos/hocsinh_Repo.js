@@ -5,6 +5,11 @@ exports.loadAll = function() {
   return db.load(sql);
 };
 
+exports.load = function(id) {
+  let sql = `select * from hocsinh where mahocsinh =${id}`;
+  return db.load(sql);
+};
+
 exports.add = function(hocsinh) {
   var sql = `insert into hocsinh(hoten, gioitinh, sdt, diachi, ngaysinh, xoa) values(N'${
     hocsinh.hoten
@@ -20,10 +25,10 @@ exports.delete = function(mahocsinh) {
 };
 
 exports.changeDetail = function(hocsinh) {
-  let sql = `update giaovien set hoten = N'${hocsinh.hoten}', gioitinh = '${
+  let sql = `update hocsinh set hoten = N'${hocsinh.hoten}', gioitinh = '${
     hocsinh.gioitinh
   }', sdt = '${hocsinh.sdt}', diachi = N'${hocsinh.diachi}', ngaysinh = '${
     hocsinh.ngaysinh
-  }' where taikhoan = '${hocsinh.mahocsinh}'`;
+  }' where mahocsinh = '${hocsinh.mahocsinh}'`;
   return db.update(sql);
 };

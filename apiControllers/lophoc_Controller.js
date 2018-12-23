@@ -18,6 +18,7 @@ router.get('/', (req, res) => {
       res.end('View error log on console.');
     });
 });
+
 router.get('/info/:id', (req, res) => {
   let id = req.params.id;
   if (parseInt(id)) {

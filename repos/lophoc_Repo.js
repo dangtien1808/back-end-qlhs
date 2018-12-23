@@ -5,6 +5,7 @@ exports.loadAll = function() {
     'select lh.*, kh.tenkhoi, gv.hoten from lophoc lh, khoi kh, giaovien gv where lh.makhoi = kh.makhoi and lh.giaovienchunhiem = gv.taikhoan and lh.xoa = 0';
   return db.load(sql);
 };
+
 exports.load = function(id) {
   let sql = `select lh.*, kh.tenkhoi, gv.hoten from lophoc lh, khoi kh, giaovien gv where lh.makhoi = kh.makhoi and lh.giaovienchunhiem = gv.taikhoan and lh.xoa = 0 and lh.malop =${id}`;
   return db.load(sql);

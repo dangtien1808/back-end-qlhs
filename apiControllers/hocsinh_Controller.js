@@ -18,6 +18,22 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/info/:id', (req, res) => {
+  let id = req.params.id;
+  if (parseInt(id)) {
+    hocsinhRepo
+      .load(parseInt(id))
+      .then(rows => {
+        res.json(rows);
+      })
+      .catch(err => {
+        console.log(err);
+        res.statusCode = 500;
+        res.end('View error log on console.');
+      });
+  }
+});
+
 router.post('/add', (req, res) => {
   hocsinhRepo
     .add(req.body)
