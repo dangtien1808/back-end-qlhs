@@ -18,6 +18,21 @@ router.get('/', (req, res) => {
       res.end('View error log on console.');
     });
 });
+router.get('/info/:id', (req, res) => {
+  let id = req.params.id;
+  if (parseInt(id)) {
+    lophocRepo
+      .load(parseInt(id))
+      .then(rows => {
+        res.json(rows);
+      })
+      .catch(err => {
+        console.log(err);
+        res.statusCode = 500;
+        res.end('View error log on console.');
+      });
+  }
+});
 
 router.post('/add', (req, res) => {
   lophocRepo
@@ -82,7 +97,7 @@ router.post('/delete', (req, res) => {
 });
 
 router.get('/:id/students', (req, res) => {
-  var id = req.params.id;
+  let id = req.params.id;
   hocsinh_lophoc_Repo
     .loadStudentByClass(id)
     .then(rows => {

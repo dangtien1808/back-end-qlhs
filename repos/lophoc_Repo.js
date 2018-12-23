@@ -5,6 +5,10 @@ exports.loadAll = function() {
     'select lh.*, kh.tenkhoi, gv.hoten from lophoc lh, khoi kh, giaovien gv where lh.makhoi = kh.makhoi and lh.giaovienchunhiem = gv.taikhoan and lh.xoa = 0';
   return db.load(sql);
 };
+exports.load = function(id) {
+  let sql = `select lh.*, kh.tenkhoi, gv.hoten from lophoc lh, khoi kh, giaovien gv where lh.makhoi = kh.makhoi and lh.giaovienchunhiem = gv.taikhoan and lh.xoa = 0 and lh.malop =${id}`;
+  return db.load(sql);
+};
 
 exports.add = function(lophoc) {
   var sql = `insert into lophoc(tenlop, makhoi, sisotoida, giaovienchunhiem, namhoc, xoa) values(N'${
@@ -20,7 +24,7 @@ exports.changeDetail = function(lophoc) {
     lophoc.makhoi
   }', sisotoida = '${lophoc.sisotoida}', giaovienchunhiem = '${
     lophoc.giaovienchunhiem
-  }', namhoc = N'${user.namhoc}' where malop = '${lophoc.malop}'`;
+  }', namhoc = N'${lophoc.namhoc}' where malop = '${lophoc.malop}'`;
   return db.update(sql);
 };
 
