@@ -13,7 +13,7 @@ exports.add = function(
   chitiethk1,
   chitiethk2
 ) {
-  var sql = `insert into hocsinh_lophoc_monhoc(mahocsinh, malop, mamon, diemhk1, diemhk2, gvphutrach) values('${mahocsinh}', '${malop}', '${mamon}', '${chitiethk1}', '${chitiethk2}', '${gvphutrach}')`;
+  var sql = `insert into hocsinh_lophoc_monhoc(mahocsinh, malop, mamon, diemhk1, diemhk2, gvphutrach, xoa) values('${mahocsinh}', '${malop}', '${mamon}', '${chitiethk1}', '${chitiethk2}', '${gvphutrach}', 0)`;
   return db.insert(sql);
 };
 
@@ -27,6 +27,11 @@ exports.changeTeacher = function(hocsinh_lophoc_monhoc, gvphutrach) {
 };
 
 exports.loadStudentByClass = function(malop) {
-  let sql = `SELECT * from hocsinh where mahocsinh IN (SELECT DISTINCT mahocsinh FROM hocsinh_lophoc_monhoc where malop = '${malop}')`;
+  let sql = `SELECT * from hocsinh where mahocsinh IN (SELECT DISTINCT mahocsinh FROM hocsinh_lophoc_monhoc where malop = '${malop}' and xoa = 0)`;
   return db.load(sql);
+};
+
+exports.delete = function(mahocsinh, malop) {
+  let sql = `update hocsinh_lophoc_monhoc set xoa = 1 where mahocsinh = ${mahocsinh} and malop = ${malop}`;
+  return db.update(sql);
 };

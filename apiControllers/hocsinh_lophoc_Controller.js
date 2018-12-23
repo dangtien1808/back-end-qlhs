@@ -23,12 +23,9 @@ router.post('/add', (req, res) => {
     chitietbangdiem_Repo
       .add()
       .then(machitiet1 => {
-        console.log(machitiet1);
         chitietbangdiem_Repo
           .add()
           .then(machitiet2 => {
-            console.log(machitiet2);
-
             hocsinh_lophoc_Repo
               .add(
                 req.body.mahocsinh,
@@ -39,9 +36,11 @@ router.post('/add', (req, res) => {
                 machitiet2
               )
               .then(insertID => {
-                console.log(insertID);
-
-                res.end('add 3 success!.');
+                res.json({
+                  insertId: insertID,
+                  mahocsinh: req.body.mahocsinh,
+                  malop: req.body.malop
+                });
               })
               .catch(err3 => {
                 res.statusCode = 500;
@@ -61,35 +60,14 @@ router.post('/add', (req, res) => {
   }
 });
 
-router.post('/changedetail', (req, res) => {
-  hocsinhRepo
-    .changeDetail(req.body)
-    .then(affectedRows => {
-      if (affectedRows) {
-        res.json({
-          is_changedetail: true,
-          affectedRows: affectedRows
-        });
-      } else {
-        res.json({
-          is_changedetail: false
-        });
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      res.statusCode = 500;
-      res.end('change detail Fail!.');
-    });
-});
-
 router.post('/delete', (req, res) => {
-  hocsinhRepo
-    .delete(req.body.mahocsinh)
+  hocsinh_lophoc_Repo
+    .delete(req.body.mahocsinh, req.body.malop)
     .then(affectedRows => {
       res.json({
         affectedRows: affectedRows,
-        hoten: req.body.hoten
+        mahocsinh: req.body.mahocsinh,
+        malop: req.body.malop
       });
     })
     .catch(err => {
