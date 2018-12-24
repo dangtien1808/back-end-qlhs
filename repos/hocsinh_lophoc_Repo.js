@@ -1,7 +1,7 @@
 const db = require('../fn/mysql-db');
 
 exports.loadPointTable = function(mahocsinh, malop) {
-  let sql = `select * from hocsinh_lophoc_monhoc where  mahocsinh = '${mahocsinh}' and malop = '${malop}'`;
+  let sql = `select hlm.*, ct.diemmieng as diemmieng_hk1, ct.diem15phut as diem15_hk1, ct.diem1tiet as diem1t_hk1, ct.diemgk as diemgk_hk1, ct.diemck as diemck_hk1, ct2.diemmieng as diemmieng_hk2, ct2.diem15phut as diem15_hk2, ct2.diem1tiet as diem1t_hk2, ct2.diemgk as diemgk_hk2, ct2.diemck as diemck_hk2, l.tenlop, gv.hoten, m.tenmon from hocsinh_lophoc_monhoc hlm, chitietbangdiem ct, chitietbangdiem ct2, lophoc l, giaovien gv, monhoc m where hlm.mamon = m.mamon and hlm.diemhk1 = ct.machitiet and hlm.diemhk2 = ct2.machitiet and hlm.malop = l.malop and gv.taikhoan = hlm.gvphutrach and hlm.mahocsinh = '${mahocsinh}' and hlm.malop = '${malop}'`;
   return db.load(sql);
 };
 
@@ -30,8 +30,90 @@ exports.loadStudentByClass = function(malop) {
   let sql = `SELECT * from hocsinh where mahocsinh IN (SELECT DISTINCT mahocsinh FROM hocsinh_lophoc_monhoc where malop = '${malop}' and xoa = 0)`;
   return db.load(sql);
 };
+exports.loadClassByCodeStudent = function(mahocsinh) {
+  let sql = `SELECT * from lophoc where malop IN (SELECT DISTINCT malop FROM hocsinh_lophoc_monhoc where mahocsinh = '${mahocsinh}' and xoa = 0)`;
+  return db.load(sql);
+};
 
 exports.delete = function(mahocsinh, malop) {
   let sql = `update hocsinh_lophoc_monhoc set xoa = 1 where mahocsinh = ${mahocsinh} and malop = ${malop}`;
   return db.update(sql);
+};
+
+exports.avg = function(rows) {
+  let data = rows;
+  rows.forEach((row, i) => {
+    let TBHK1 = 0;
+    let TBHK2 = 0;
+    let TBNamHoc = 0;
+    let sumPoint1 = 0;
+    let numPoint1 = 0;
+
+    let arrMiengHK1 = row.diemmieng_hk1.split(',');
+    arrMiengHK1.forEach(point => {
+      sumPoint1 += parseFloat(point);
+      numPoint1++;
+    });
+    let arr15pHK1 = row.diem15_hk1.split(',');
+    arr15pHK1.forEach(point => {
+      sumPoint1 += parseFloat(point);
+      numPoint1++;
+    });
+    let arr1tHK1 = row.diem1t_hk1.split(',');
+    arr1tHK1.forEach(point => {
+      sumPoint1 += parseFloat(point);
+      numPoint1 += 2;
+    });
+    sumPoint1 += parseFloat(row.diemgk_hk1);
+    numPoint1 += 2;
+    sumPoint1 += parseFloat(row.diemck_hk1);
+    numPoint1 += 3;
+    if (isNaN(sumPoint1)) {
+      sumPoint1 = 0;
+    }
+
+    TBHK1 = parseFloat(parseFloat(sumPoint1) / numPoint1).toFixed(2);
+    let sumPoint2 = 0;
+    let numPoint2 = 0;
+    let arrMiengHK2 = row.diemmieng_hk2.split(',');
+    arrMiengHK2.forEach(point => {
+      sumPoint2 += parseFloat(point);
+      numPoint2++;
+    });
+    let arr15pHK2 = row.diem15_hk2.split(',');
+    arr15pHK2.forEach(point => {
+      sumPoint2 += parseFloat(point);
+      numPoint2++;
+    });
+    let arr1tHK2 = row.diem1t_hk2.split(',');
+    arr1tHK2.forEach(point => {
+      sumPoint2 += parseFloat(point);
+      numPoint2 += 2;
+    });
+    sumPoint2 += parseFloat(row.diemgk_hk2);
+    numPoint2 += 2;
+    sumPoint2 += parseFloat(row.diemck_hk2);
+    numPoint2 += 3;
+    if (isNaN(sumPoint2)) {
+      sumPoint2 = 0;
+    }
+    TBHK2 = parseFloat(parseFloat(sumPoint2) / numPoint2).toFixed(2);
+    TBNamHoc = parseFloat(
+      (parseFloat(TBHK1) + parseFloat(TBHK2) * 2) / 3
+    ).toFixed(2);
+    if (row.diemck_hk1 == -1) {
+      data[i].diemtb_hk1 = '';
+      data[i].diemtb_hk2 = '';
+      data[i].diemtb_namhoc = '';
+    } else if (row.diemck_hk1 != -1 && row.diemck_hk2 == -1) {
+      data[i].diemtb_hk1 = TBHK1;
+      data[i].diemtb_hk2 = '';
+      data[i].diemtb_namhoc = '';
+    } else if (row.diemck_hk2 != -1) {
+      data[i].diemtb_hk1 = TBHK1;
+      data[i].diemtb_hk2 = TBHK2;
+      data[i].diemtb_namhoc = TBNamHoc;
+    }
+  });
+  return data;
 };

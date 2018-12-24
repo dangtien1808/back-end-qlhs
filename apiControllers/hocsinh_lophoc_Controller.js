@@ -6,16 +6,28 @@ const chitietbangdiem_Repo = require('../repos/chitietbangdiem_Repo');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  hocsinh_lophoc_Repo
-    .loadPointTable(req.query.mahocsinh, req.query.malop)
-    .then(rows => {
-      res.json(rows);
-    })
-    .catch(err => {
-      console.log(err);
-      res.statusCode = 500;
-      res.end('View error log on console.');
-    });
+  if (req.query.malop) {
+    hocsinh_lophoc_Repo
+      .loadPointTable(req.query.mahocsinh, req.query.malop)
+      .then(rows => {
+        let data = hocsinh_lophoc_Repo.avg(rows);
+        res.json(data);
+      })
+      .catch(err => {
+        console.log(err);
+        res.statusCode = 500;
+        res.end('View error log on console.');
+      });
+  } else {
+    hocsinh_lophoc_Repo
+      .loadClassByCodeStudent(req.query.mahocsinh)
+      .then(rows => res.json(rows))
+      .catch(err => {
+        console.log(err);
+        res.statusCode = 500;
+        res.end('View error log on console');
+      });
+  }
 });
 
 router.post('/add', (req, res) => {
