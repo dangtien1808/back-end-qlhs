@@ -88,5 +88,52 @@ router.post('/delete', (req, res) => {
       res.end('delete giaovien Fail!.');
     });
 });
+router.get('/infoPoint', (req, res) => {
+  let mahocsinh = req.query.mahocsinh;
+  let malop = req.query.malop;
+  let mamon = req.query.mamon;
+  let hocki = req.query.hocki;
+  hocsinh_lophoc_Repo
+    .loadDetailPoint(mahocsinh, malop, mamon, hocki)
+    .then(rows => {
+      res.json(rows);
+    })
+    .catch(err => {
+      console.log(err);
+      res.statusCode = 500;
+      res.end('View error log on console.');
+    });
+});
+router.get('/tablePoint', (req, res) => {
+  let malop = req.query.malop;
+  let mamon = req.query.mamon;
+  let hocki = req.query.hocki;
+  hocsinh_lophoc_Repo
+    .loadTablePoint(malop, mamon, hocki)
+    .then(rows => {
+      let data = hocsinh_lophoc_Repo.avgClass(rows);
+      res.json(data);
+    })
+    .catch(err => {
+      console.log(err);
+      res.statusCode = 500;
+      res.end('View error log on console.');
+    });
+});
+router.post('/editPoint', (req, res) => {
+  chitietbangdiem_Repo
+    .changeDetail(req.body)
+    .then(affectedRows => {
+      res.json({
+        affectedRows: affectedRows,
+        mahocsinh: req.body.machitiet
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.statusCode = 500;
+      res.end('View error log on console.');
+    });
+});
 
 module.exports = router;

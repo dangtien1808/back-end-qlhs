@@ -30,6 +30,24 @@ exports.loadStudentByClass = function(malop) {
   let sql = `SELECT * from hocsinh where mahocsinh IN (SELECT DISTINCT mahocsinh FROM hocsinh_lophoc_monhoc where malop = '${malop}' and xoa = 0)`;
   return db.load(sql);
 };
+exports.loadDetailPoint = function(mahocsinh, malop, mamon, hocki) {
+  if (parseInt(hocki) == 1) {
+    let sql = `SELECT ct.* FROM chitietbangdiem ct, hocsinh_lophoc_monhoc hs_lh_mh  WHERE ct.machitiet = hs_lh_mh.diemhk1 and hs_lh_mh.mahocsinh = ${mahocsinh} and hs_lh_mh.malop = ${malop} and hs_lh_mh.mamon = ${mamon} and hs_lh_mh.xoa = 0`;
+    return db.load(sql);
+  } else {
+    let sql = `SELECT ct.* FROM chitietbangdiem ct, hocsinh_lophoc_monhoc hs_lh_mh  WHERE ct.machitiet = hs_lh_mh.diemhk2 and hs_lh_mh.mahocsinh = ${mahocsinh} and hs_lh_mh.malop = ${malop} and hs_lh_mh.mamon = ${mamon} and hs_lh_mh.xoa = 0`;
+    return db.load(sql);
+  }
+};
+exports.loadTablePoint = function(malop, mamon, hocki) {
+  if (parseInt(hocki) == 1) {
+    let sql = `SELECT ct.*, hs.hoten FROM chitietbangdiem ct, hocsinh_lophoc_monhoc hs_lh_mh, hocsinh hs  WHERE hs.mahocsinh = hs_lh_mh.mahocsinh and ct.machitiet = hs_lh_mh.diemhk1 and hs_lh_mh.malop = ${malop} and hs_lh_mh.mamon = ${mamon} and hs_lh_mh.xoa = 0`;
+    return db.load(sql);
+  } else {
+    let sql = `SELECT ct.*, hs.hoten FROM chitietbangdiem ct, hocsinh_lophoc_monhoc hs_lh_mh, hocsinh hs WHERE hs.mahocsinh = hs_lh_mh.mahocsinh and ct.machitiet = hs_lh_mh.diemhk2 and hs_lh_mh.malop = ${malop} and hs_lh_mh.mamon = ${mamon} and hs_lh_mh.xoa = 0`;
+    return db.load(sql);
+  }
+};
 exports.loadClassByCodeStudent = function(mahocsinh) {
   let sql = `SELECT * from lophoc where malop IN (SELECT DISTINCT malop FROM hocsinh_lophoc_monhoc where mahocsinh = '${mahocsinh}' and xoa = 0)`;
   return db.load(sql);
@@ -113,6 +131,43 @@ exports.avg = function(rows) {
       data[i].diemtb_hk1 = TBHK1;
       data[i].diemtb_hk2 = TBHK2;
       data[i].diemtb_namhoc = TBNamHoc;
+    }
+  });
+  return data;
+};
+exports.avgClass = function(rows) {
+  let data = rows;
+  rows.forEach((row, i) => {
+    let sumPoint1 = 0;
+    let numPoint1 = 0;
+
+    let arrMiengHK1 = row.diemmieng.split(',');
+    arrMiengHK1.forEach(point => {
+      sumPoint1 += parseFloat(point);
+      numPoint1++;
+    });
+    let arr15pHK1 = row.diem15phut.split(',');
+    arr15pHK1.forEach(point => {
+      sumPoint1 += parseFloat(point);
+      numPoint1++;
+    });
+    let arr1tHK1 = row.diem1tiet.split(',');
+    arr1tHK1.forEach(point => {
+      sumPoint1 += parseFloat(point);
+      numPoint1 += 2;
+    });
+    sumPoint1 += parseFloat(row.diemgk);
+    numPoint1 += 2;
+    sumPoint1 += parseFloat(row.diemck);
+    numPoint1 += 3;
+    if (isNaN(sumPoint1)) {
+      sumPoint1 = 0;
+    }
+    let TBHK1 = parseFloat(parseFloat(sumPoint1) / numPoint1).toFixed(2);
+    if (row.diemck == -1) {
+      data[i].diemtb = '';
+    } else {
+      data[i].diemtb = TBHK1;
     }
   });
   return data;
