@@ -63,5 +63,22 @@ router.post('/delete', (req, res) => {
       res.end('delete giaovien Fail!.');
     });
 });
+router.post('/account', (req, res) => {
+  giaovienRepo
+    .account(req.body.taikhoan)
+    .then(affectedRows => {
+      console.log();
+      res.statusCode = 200;
+      res.json({
+        affectedRows: affectedRows,
+        taikhoan: req.body.taikhoan
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.statusCode = 500;
+      res.end('delete giaovien Fail!.');
+    });
+});
 
 module.exports = router;

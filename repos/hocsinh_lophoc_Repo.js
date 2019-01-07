@@ -120,11 +120,14 @@ exports.avg = function(rows) {
       (parseFloat(TBHK1) + parseFloat(TBHK2) * 2) / 3
     ).toFixed(2);
     if (row.diemck_hk1 == -1) {
+      data[i].diemck_hk1 = 0;
+      data[i].diemck_hk2 = 0;
       data[i].diemtb_hk1 = '';
       data[i].diemtb_hk2 = '';
       data[i].diemtb_namhoc = '';
     } else if (row.diemck_hk1 != -1 && row.diemck_hk2 == -1) {
       data[i].diemtb_hk1 = TBHK1;
+      data[i].diemck_hk2 = 0;
       data[i].diemtb_hk2 = '';
       data[i].diemtb_namhoc = '';
     } else if (row.diemck_hk2 != -1) {
@@ -166,6 +169,7 @@ exports.avgClass = function(rows) {
     let TBHK1 = parseFloat(parseFloat(sumPoint1) / numPoint1).toFixed(2);
     if (row.diemck == -1) {
       data[i].diemtb = '';
+      data[i].diemck = 0;
     } else {
       data[i].diemtb = TBHK1;
     }
